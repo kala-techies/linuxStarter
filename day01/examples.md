@@ -127,6 +127,3 @@
   ```bash
   tree /path/to/directory
   ```
-```
-
----
