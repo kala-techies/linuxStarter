@@ -91,6 +91,11 @@
   rm -r directory_name
   ```
 
+- **Command to install tree:**
+  ```
+  sudo apt install tree
+  ```
+
 - **Tree view of directories (if `tree` is installed):**
   ```bash
   tree
