@@ -89,4 +89,3 @@
   ```bash
   chmod +x script.sh
   ```
-```
