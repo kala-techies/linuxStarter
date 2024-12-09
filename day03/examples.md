@@ -1,5 +1,5 @@
 
-# Day 3 Examples: Permissions and Ownership
+# Day 3 : Permissions and Ownership
 
 ## File and Directory Creation Examples
 1. **Create a new file:**
