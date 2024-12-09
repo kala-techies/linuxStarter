@@ -6,14 +6,15 @@ Welcome to the **linuxStarter** repository, a 7-day series designed to teach Lin
 ---
 
 ## Table of Contents
+
 - [Project Structure](#project-structure)
-- [Day 1 - Introduction to Linux and Basic Commands](#day-1-introduction-to-linux-and-basic-commands)
-- [Day 2 - Navigating the Filesystem and File Operations](#day-2-navigating-the-filesystem-and-file-operations)
-- [Day 3 - Permissions and Ownership](#day-3-permissions-and-ownership)
-- [Day 4 - User Management and Process Management](#day-4-user-management-and-process-management)
-- [Day 5 - Networking and System Monitoring](#day-5-networking-and-system-monitoring)
-- [Day 6 - Scheduling Tasks and Automating](#day-6-scheduling-tasks-and-automating)
-- [Day 7 - Advanced Commands and Troubleshooting](#day-7-advanced-commands-and-troubleshooting)
+- [Day 1 - Introduction to Linux and Basic Commands](#day-1---introduction-to-linux-and-basic-commands)
+- [Day 2 - Navigating the Filesystem and File Operations](#day-2---navigating-the-filesystem-and-file-operations)
+- [Day 3 - Permissions and Ownership](#day-3---permissions-and-ownership)
+- [Day 4 - User Management and Process Management](#day-4---user-management-and-process-management)
+- [Day 5 - Networking and System Monitoring](#day-5---networking-and-system-monitoring)
+- [Day 6 - Scheduling Tasks and Automating](#day-6---scheduling-tasks-and-automating)
+- [Day 7 - Advanced Commands and Troubleshooting](#day-7---advanced-commands-and-troubleshooting)
 - [Code of Conduct](#code-of-conduct)
 - [Contributing](#contributing)
 - [Connect with Me](#connect-with-me)
