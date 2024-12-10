@@ -118,4 +118,3 @@
    chmod -R 755 /var/www/html
    ```
    Useful for web servers where files need specific permissions.
-```
