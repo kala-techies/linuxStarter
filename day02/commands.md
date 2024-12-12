@@ -136,4 +136,3 @@
   ```bash
   rm -rf old_project
   ```
-```
