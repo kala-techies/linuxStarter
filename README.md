@@ -147,4 +147,4 @@ If you're eager to learn more or have any questions, feel free to connect with m
 
 🔗 **[Connect on Topmate](https://staging2.topmate.io/kala)**  
 
-Just send me a message, and I’ll get back to you as soon as possible.
+Just send me a message, and I’ll get back to you as soon as possible
