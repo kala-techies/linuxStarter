@@ -1,12 +1,4 @@
 
-# Day 2 Commands: Filesystem Navigation and File Operations
-
-## Directory Management
-- **Create a directory:**
-  ```bash
-  mkdir directory_name
-  ```
-
 # Day 04 — Filesystem Navigation and File Operations
 
 This file lists common Linux filesystem and navigation commands with a few practical examples and short safety notes.
@@ -17,146 +9,196 @@ This file lists common Linux filesystem and navigation commands with a few pract
 ```bash
 mkdir directory_name
 ```
+# Day 04 — User Management and Process Management
 
-- Create a directory with verbose output:
+This document covers common commands for adding/removing/modifying users and groups, plus basic process management (viewing, controlling, and inspecting processes). Examples include safe usages and short notes about system files and permissions.
+
+## Requirements / scope
+
+- Add, modify, and remove users: `useradd`, `adduser` (Debian-friendly), `usermod`, `userdel`, `passwd`.
+- Manage groups: `groupadd`, `groupdel`, `groups`, `id`, `gpasswd`, `usermod -aG`.
+- Process inspection and control: `ps`, `top`, `htop`, `pgrep`, `pkill`, `kill`, `kill -9`, `nice`, `renice`, job control (`&`, `jobs`, `fg`, `bg`).
+
+> Many user/group commands require root. Use `sudo` when appropriate.
+
+## User management
+
+- Add a new user (create home directory and set shell):
 ```bash
-mkdir -v directory_name
+sudo useradd -m -s /bin/bash -c "Full Name" -G sudo username
+```
+Notes:
+	- `-m` creates a home directory (/home/username).
+	- `-s` sets login shell.
+	- `-G` sets supplementary groups (comma-separated).
+
+- Debian/Ubuntu friendly (interactive):
+```bash
+sudo adduser username
 ```
 
-- Create nested directories (parents as needed):
+- Set or change a user's password:
 ```bash
-mkdir -p parent_directory/sub_directory/sub_sub_directory
+sudo passwd username
 ```
 
-- Create a directory with specific permissions:
+- Modify an existing user (e.g., add to a group):
 ```bash
-mkdir -m 700 secure_directory
+sudo usermod -aG docker username   # add to 'docker' group
+sudo usermod -c "New Comment" -l newlogin oldlogin  # change comment/login
 ```
 
-## Listing files and directories
-
-- List files in the current directory:
+- Delete a user (keep/remove home):
 ```bash
-ls
+sudo userdel username        # leaves home
+sudo userdel -r username     # removes home and mail spool
 ```
 
-- Long listing (detailed info):
+- Lock and unlock an account:
 ```bash
-ls -l
+sudo passwd -l username  # lock
+sudo passwd -u username  # unlock
 ```
 
-- Sort by modification time (newest first):
+- Inspect user and account info:
 ```bash
-ls -lt
+getent passwd username   # shows passwd entry from NSS
+id username              # uid/gid and group membership
+groups username
+sudo chage -l username   # password expiry info
 ```
 
-- Reverse time order (oldest first):
+## Group management
+
+- Create and remove groups:
 ```bash
-ls -ltr
+sudo groupadd devs
+sudo groupdel oldgroup
 ```
 
-- Show all files including hidden ones:
+- View groups for the current user:
 ```bash
-ls -a
+groups
+id
 ```
 
-- Human-readable sizes:
+## Important system files
+
+- /etc/passwd — user account info (non-secret fields)
+- /etc/shadow — password hashes and expiry (root-readable only)
+- /etc/group — group membership
+
+Use `getent passwd`/`getent group` to query the system using NSS (works with LDAP/NIS, etc.).
+
+## Process management — viewing processes
+
+- List processes (BSD format):
 ```bash
-ls -lh
+ps aux | less
 ```
 
-- Show inode numbers:
+- List processes (Unix style):
 ```bash
-ls -i
+ps -ef | less
 ```
 
-## Navigation commands
-
-- Print current directory:
+- Find a process by name/PID:
 ```bash
-pwd
+pgrep -l sshd      # show PIDs and names
+ps -p <pid> -o pid,ppid,cmd,%mem,%cpu
 ```
 
-- Go to the home directory:
+- Interactive viewers:
 ```bash
-cd ~
+top               # built-in, interactive
+htop              # nicer UI (install: sudo apt install htop)
 ```
 
-- Go to the previous directory:
+## Process control — stopping/killing
+
+- Graceful termination (ask process to exit):
 ```bash
-cd -
+sudo kill <pid>    # sends SIGTERM (15)
 ```
 
-- Change to a specific directory:
+- Forceful termination (use only when necessary):
 ```bash
-cd /path/to/directory
+sudo kill -9 <pid> # sends SIGKILL (9)
+```
+Note: SIGTERM lets the process clean up; prefer it before SIGKILL.
+
+- Kill by name:
+```bash
+sudo pkill -f process_name   # matches full command line
+sudo killall process_name    # kill by executable name (not on all distros)
 ```
 
-## Removing directories and files
+## Jobs, background and foreground
 
-- Remove an empty directory:
+- Start a command in background:
 ```bash
-rmdir directory_name
+sleep 600 &
 ```
 
-- Remove a directory and its contents recursively (dangerous):
+- List jobs in current shell:
 ```bash
-rm -rf directory_name
-```
-Note: rm -rf is destructive. Consider safer alternatives like `rm -rI` (interactive for multiple files) or using a trash utility such as `trash-cli`.
-
-- Force remove a file:
-```bash
-rm -f file_name
+jobs -l
 ```
 
-## Viewing directory tree
-
-- Display directory structure as a tree:
+- Bring a job to foreground or background:
 ```bash
-tree
-```
-Note: `tree` may not be installed by default. Install with your distro package manager (for example, Debian/Ubuntu: `sudo apt install tree`; Fedora: `sudo dnf install tree`; Arch: `sudo pacman -S tree`).
-
-## Using the manual (man)
-
-- Show the manual for a command:
-```bash
-man command_name
-```
-Example:
-```bash
-man ls
+fg %1
+bg %1
 ```
 
-## Real-life examples
+## Priorities: nice and renice
 
-- Create a project structure with common subfolders:
+- Start a process with a lower priority (higher niceness number):
 ```bash
-mkdir -p project/src project/tests project/docs
+nice -n 10 long_running_command
 ```
 
-- List all files (including hidden) in a specific directory:
+- Change priority of running process:
 ```bash
-ls -a /path/to/directory
+sudo renice -n 5 -p <pid>
 ```
 
-- View detailed information for a directory:
+## Service management (brief)
+
+- Many user-space daemons are managed by systemd. View status and control services:
 ```bash
-ls -lh /path/to/directory
+sudo systemctl status sshd.service
+sudo systemctl start|stop|restart|enable|disable sshd.service
 ```
 
-- Navigate back to the previous working directory:
+## Examples / real-life tasks
+
+- Add developer user and set password:
 ```bash
-cd -
+sudo useradd -m -s /bin/bash -G sudo -c "Dev User" devuser
+sudo passwd devuser
 ```
 
-- Delete an old project directory (use with caution):
+- Add existing user to the `docker` group so they can run Docker without sudo:
 ```bash
-rm -rf old_project
+sudo usermod -aG docker alice
 ```
 
-## Notes
+- Find and kill a runaway process:
+```bash
+pgrep -f myscript.py     # find PID(s)
+sudo kill <pid>           # try graceful
+sudo kill -9 <pid>        # if that fails
+```
 
-- This document focuses on common commands; many commands have additional useful options. Use `man` to explore them.
-- Be careful with destructive commands (rm, dd, etc.). When in doubt, test on disposable data or use interactive options.
+## Safety notes
+
+- Always prefer `kill` (SIGTERM) before `kill -9` (SIGKILL).
+- Use `userdel -r` with caution (it removes home and mail spools).
+- Operations that modify users/groups usually require root. Test on a non-production system when possible.
+
+## Further reading
+
+- `man useradd`, `man usermod`, `man userdel`, `man passwd`, `man ps`, `man kill`, `man systemctl`.
+
+---
