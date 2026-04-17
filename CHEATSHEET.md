@@ -105,3 +105,5 @@ If you're not sure how to continue, follow these concrete steps to learn effecti
 ## Thanks
 
 Thanks to everyone who believed in me and took the time to go through this content — your support means a lot. If this material helped, please share feedback or improvements.
+
+Thanks for reading — Kalandar
